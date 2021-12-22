@@ -15,11 +15,14 @@ func (app *application) getGame(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(params.ByName("id"))
 	if err != nil {
 		app.logger.Print(errors.New("[getGame] -> invalid id parameter"))
+
+		app.errorHandler(w, err)
+		return
 	}
 
 	app.logger.Println("id is", id)
 
-	movie := models.Game{
+	game := models.Game{
 		ID:          id,
 		Title:       "Red Alert 2",
 		Description: "One of the best RTS strategy games",
@@ -30,7 +33,7 @@ func (app *application) getGame(w http.ResponseWriter, r *http.Request) {
 		UpdatedAt:   time.Now(),
 	}
 
-	err = app.writeJSON(w, http.StatusOK, movie, "game")
+	err = app.writeJSON(w, http.StatusOK, game, "game")
 }
 
 func (app *application) getAllGames(w http.ResponseWriter, r *http.Request) {

@@ -21,3 +21,17 @@ func (app *application) writeJSON(w http.ResponseWriter, status int, data interf
 
 	return nil
 }
+
+func (app *application) errorHandler(w http.ResponseWriter, err error) {
+	type jsonError struct {
+		Error       string `json:"error"`
+		Description string `json:"description"`
+	}
+
+	handledError := jsonError{
+		Error:       "",
+		Description: err.Error(),
+	}
+
+	app.writeJSON(w, http.StatusBadRequest, handledError, "error")
+}
